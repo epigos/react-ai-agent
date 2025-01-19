@@ -1,0 +1,64 @@
+# See https://pre-commit.com for more information
+# See https://pre-commit.com/hooks.html for more hooks
+default_language_version:
+  python: python3.13
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: check-added-large-files
+      - id: check-ast
+      - id: check-case-conflict
+      - id: check-merge-conflict
+      - id: check-symlinks
+      - id: check-toml
+      - id: check-xml
+      - id: check-yaml
+      - id: check-vcs-permalinks
+      - id: debug-statements
+      - id: end-of-file-fixer
+      - id: fix-byte-order-marker
+      - id: mixed-line-ending
+        args: [ --fix=lf ]
+      - id: trailing-whitespace
+        args: [ --markdown-linebreak-ext=md ]
+  - repo: https://github.com/myint/autoflake
+    rev: v2.2.0
+    hooks:
+      - id: autoflake
+        args: [
+          --remove-all-unused-imports,
+          --in-place,
+        ]
+  - repo: https://github.com/PyCQA/isort
+    rev: 5.12.0
+    hooks:
+      - id: isort
+        entry: poetry run isort
+  - repo: https://github.com/psf/black
+    rev: 23.7.0
+    hooks:
+      - id: black
+        entry: poetry run black
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: 'v1.10.0'  # Use the sha / tag you want to point at
+    hooks:
+      - id: mypy
+        entry: poetry run mypy
+        args:
+          - --show-traceback
+        exclude: ^(tests/|migrations/)
+  - repo: local
+    hooks:
+      - id: poetry-check-lock
+        name: poetry-check-lock
+        entry: poetry check --lock
+        language: system
+        stages: [ pre-commit ]
+        fail_fast: true
+        verbose: false
+        files: 'poetry.lock'
+        pass_filenames: false
+ci:
+  autofix_commit_msg: 🎨 [pre-commit.ci] Auto format from pre-commit.com hooks
+  autoupdate_commit_msg: ⬆ [pre-commit.ci] pre-commit autoupdate
