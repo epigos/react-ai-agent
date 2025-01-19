@@ -1,5 +1,7 @@
 # React Agent with Long-Term Memory and Tool Integration  
 
+![CI](https://github.com/epigos/react-ai-agent/actions/workflows/ci.yaml/badge.svg)
+
 This project demonstrates a **React Agent** built using **[LangGraph](https://langchain-ai.github.io/langgraph/tutorials/introduction/)** with advanced tool integration and long-term memory capabilities.
 The agent is designed to assist users in customer support scenarios
 with a rich set of tools and a sleek UI interface powered by **[Chainlit](https://docs.chainlit.io/get-started/overview)**.
