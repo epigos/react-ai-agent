@@ -79,6 +79,11 @@ def get_logging_config() -> typing.Dict[str, typing.Any]:
                 "level": "INFO",
                 "propagate": False,
             },
+            "langchain_core": {
+                "handlers": ["default"],
+                "level": "ERROR",
+                "propagate": False,
+            },
         },
     }
 

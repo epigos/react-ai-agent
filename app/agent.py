@@ -3,7 +3,7 @@ import typing
 from datetime import datetime
 
 from langchain_core.language_models import BaseChatModel
-from langchain_core.messages import AIMessage, BaseMessage, HumanMessage
+from langchain_core.messages import BaseMessage, HumanMessage
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.runnables import RunnableConfig
 from langgraph.checkpoint.base import BaseCheckpointSaver
@@ -35,22 +35,19 @@ class Agent:
             "messages": [HumanMessage(content=message)],
             "today": datetime.now().isoformat(),
         }
-        async for event in self._graph.astream_events(
+        async for msg, metadata in self._graph.astream(
             inputs,
             config=config,
-            version="v2",
+            stream_mode="messages",
         ):
-            kind = event["event"]
-            metadata = event["metadata"]
-            if kind != "on_chat_model_stream" or metadata["langgraph_node"] != "agent":
-                continue
-            chunk = event["data"]["chunk"]
-            if not isinstance(chunk, AIMessage):
-                continue
-            if not chunk.content:
-                continue
-
-            yield utils.get_message_text(chunk)
+            msg = typing.cast(BaseMessage, msg)
+            metadata = typing.cast(dict[str, typing.Any], metadata)
+            if (
+                msg.content
+                and not isinstance(msg, HumanMessage)
+                and metadata["langgraph_node"] == "agent"
+            ):
+                yield utils.get_message_text(msg)
 
     async def invoke(self, message: str, config: RunnableConfig) -> str:
         inputs = {

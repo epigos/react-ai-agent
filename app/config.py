@@ -26,6 +26,8 @@ class Settings(BaseSettings):
     retriever_threshold: float = 0.3
     # openai config
     openai_api_key: pydantic.SecretStr = pydantic.SecretStr("")
+    # chainlit
+    literal_api_key: str | None = None
 
     model_config = SettingsConfigDict(
         env_file=f"{root_dir}/.env", env_file_encoding="utf-8"

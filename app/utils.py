@@ -22,7 +22,12 @@ def load_chat_model(
     """
     provider, model = fully_specified_name.split(":", maxsplit=1)
     return init_chat_model(
-        model, model_provider=provider, temperature=temperature, max_tokens=max_tokens
+        model,
+        model_provider=provider,
+        temperature=temperature,
+        max_tokens=max_tokens,
+        stream_usage=True,
+        max_retries=2,
     )
 
 
